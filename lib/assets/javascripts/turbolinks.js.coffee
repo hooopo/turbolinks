@@ -154,14 +154,16 @@ installClickHandlerLast = (event) ->
 handleClick = (event) ->
   unless event.defaultPrevented
     link = extractLink event
-    if link.nodeName is 'A' and !ignoreClick(event, link)
+    if (link && link.nodeName) is 'A' and !ignoreClick(event, link)
       visit link.href
       event.preventDefault()
 
 
 extractLink = (event) ->
   link = event.target
-  link = link.parentNode until link is document or link.nodeName is 'A'
+  loop 
+    link = link.parentNode
+    break if link is null or link is document or link.nodeName is 'A'
   link
 
 samePageLink = (link) ->
